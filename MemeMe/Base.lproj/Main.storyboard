@@ -18,9 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6uO-Zu-Hez">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
-                            </imageView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cwf-uG-lpu">
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
@@ -54,22 +51,17 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="6uO-Zu-Hez" secondAttribute="bottom" id="538-CB-f1c"/>
-                            <constraint firstItem="6uO-Zu-Hez" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="DAI-92-A7z"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="cwf-uG-lpu" secondAttribute="bottom" id="LXv-nl-W3i"/>
                             <constraint firstItem="J2Y-MY-rk0" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Wm3-Mw-sAm"/>
                             <constraint firstAttribute="trailing" secondItem="J2Y-MY-rk0" secondAttribute="trailing" id="fvK-yU-N6s"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cwf-uG-lpu" secondAttribute="trailing" constant="-20" id="gsE-yn-70w"/>
-                            <constraint firstAttribute="trailing" secondItem="6uO-Zu-Hez" secondAttribute="trailing" id="hvf-8z-jHh"/>
                             <constraint firstItem="J2Y-MY-rk0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="mSv-Ip-z7d"/>
-                            <constraint firstItem="6uO-Zu-Hez" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="xmc-Xp-R0t"/>
                             <constraint firstItem="cwf-uG-lpu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="yvo-88-BaP"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="actionBar" destination="J2Y-MY-rk0" id="tsN-fO-HOQ"/>
                         <outlet property="cameraButton" destination="URB-4G-AKL" id="Fqd-9L-JDz"/>
-                        <outlet property="picture" destination="6uO-Zu-Hez" id="X9j-Jv-ztN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
