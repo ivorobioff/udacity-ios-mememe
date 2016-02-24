@@ -22,7 +22,7 @@ class MemeImageView: UIImageView {
     
     private lazy var heightConstraint: NSLayoutConstraint = {
         [unowned self] in
-        return self.heightAnchor.constraintEqualToConstant(500)
+        return self.heightAnchor.constraintEqualToConstant(0)
     }()
     
     
@@ -38,18 +38,22 @@ class MemeImageView: UIImageView {
     
     private lazy var widthConstraint: NSLayoutConstraint = {
         [unowned self] in
-        return self.widthAnchor.constraintEqualToConstant(500)
+        return self.widthAnchor.constraintEqualToConstant(0)
     }()
     
     convenience init(){
         self.init(image: nil)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor.yellowColor()
+        contentMode = .ScaleAspectFit
     }
     
     override var image: UIImage? {
         didSet {
+            guard image != nil else {
+                return
+            }
             
+            refreshBounds()
         }
     }
     
@@ -75,15 +79,43 @@ class MemeImageView: UIImageView {
         widthConstraint.active = flag
     }
     
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        centerXAnchor.constraintEqualToAnchor(superview!.centerXAnchor).active = true
+        centerYAnchor.constraintEqualToAnchor(superview!.centerYAnchor).active = true
+    }
+    
     override func layoutSublayersOfLayer(layer: CALayer) {
         
+        if isLandscape() {
+            adjustToLandscape()
+        } else {
+            adjustToPortrait()
+        }
+        
+        refreshBounds()
+    }
+    
+    private func refreshBounds() {
+        
+        guard image != nil else {
+            return
+        }
+        
+        if isLandscape() {
+            let r = image!.size.height / frame.height
+            widthConstraint.constant = image!.size.width / r
+        } else {
+            let r = image!.size.width / frame.width
+            heightConstraint.constant = image!.size.height / r
+        }
+    }
+    
+    private func isLandscape() -> Bool {
         let h = superview!.frame.height
         let w = superview!.frame.width
         
-        if h > w {
-            adjustToPortrait()
-        } else {
-            adjustToLandscape()
-        }
+        return w > h
     }
 }
