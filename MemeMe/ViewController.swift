@@ -8,18 +8,58 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIToolbarDelegate{
 
+    @IBOutlet weak var picture: UIImageView!
+    @IBOutlet weak var cameraButton: UIBarButtonItem!
+    @IBOutlet weak var actionBar: UINavigationBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        if picker.sourceType == .Camera {
+            
+        } else {
+            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                picture.image = image
+            }
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    @IBAction func pickImage(sender: UIBarButtonItem) {
+        
+        let picker = UIImagePickerController()
+        
+        picker.sourceType = .PhotoLibrary
+        
+        picker.delegate = self
+        
+        presentViewController(picker, animated: true, completion: nil)
     }
-
-
+    
+    @IBAction func takePhoto(sender: UIBarButtonItem) {
+        let picker = UIImagePickerController()
+        
+        picker.sourceType = .Camera
+        
+        picker.delegate = self
+        
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    
+    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
+        return .TopAttached
+    }
+    
+    override func viewDidLayoutSubviews() {
+        actionBar.sizeToFit()
+    }
 }
 
