@@ -12,14 +12,33 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var actionBar: UINavigationBar!
+    @IBOutlet weak var toolbar: UIToolbar!
     
-    private let picture = MemeImageView()
+    private var isFullScreen = false
+    
+    private let meme = MemeImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
         
-        view.insertSubview(picture, belowSubview: view.subviews.first!)
+        view.insertSubview(meme, belowSubview: view.subviews.first!)
+        
+        meme.onTapped = toggleEditMode
+    }
+    
+    private func toggleEditMode(){
+        if isFullScreen {
+            actionBar.hidden = false
+            toolbar.hidden = false
+            meme.turnEditingModeOff()
+            isFullScreen = false
+        } else {
+            actionBar.hidden = true
+            toolbar.hidden = true
+            meme.turnEditingModeOn()
+            isFullScreen = true
+        }
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -28,13 +47,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
         } else {
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                picture.image = image
+                meme.image = image
             }
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-
 
     @IBAction func pickImage(sender: UIBarButtonItem) {
         

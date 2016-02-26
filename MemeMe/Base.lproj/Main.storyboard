@@ -41,7 +41,6 @@
                                 <items>
                                     <navigationItem id="CbK-EA-z6s">
                                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="NF1-tP-Ixp"/>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="Vbj-eB-h77"/>
                                     </navigationItem>
                                 </items>
                                 <connections>
@@ -49,7 +48,7 @@
                                 </connections>
                             </navigationBar>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="cwf-uG-lpu" secondAttribute="bottom" id="LXv-nl-W3i"/>
                             <constraint firstItem="J2Y-MY-rk0" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Wm3-Mw-sAm"/>
@@ -62,6 +61,7 @@
                     <connections>
                         <outlet property="actionBar" destination="J2Y-MY-rk0" id="tsN-fO-HOQ"/>
                         <outlet property="cameraButton" destination="URB-4G-AKL" id="Fqd-9L-JDz"/>
+                        <outlet property="toolbar" destination="cwf-uG-lpu" id="sdl-bF-zAX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

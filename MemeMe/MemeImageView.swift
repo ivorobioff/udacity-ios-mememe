@@ -10,6 +10,15 @@ import UIKit
 
 class MemeImageView: UIImageView {
     
+    var onTapped: (() -> (Void))?
+    
+    private let placeholderStyle: [String: AnyObject] = [
+        NSStrokeColorAttributeName: UIColor.blackColor(),
+        NSStrokeWidthAttributeName: -2.0,
+        NSForegroundColorAttributeName: UIColor(red:1.0, green:1.0, blue:1.0, alpha:0.5),
+        NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size:  35)!
+    ]
+    
     private lazy var leadingConstraint: NSLayoutConstraint = {
         [unowned self] in
         return self.leadingAnchor.constraintEqualToAnchor(self.superview!.leadingAnchor)
@@ -41,10 +50,53 @@ class MemeImageView: UIImageView {
         return self.widthAnchor.constraintEqualToConstant(0)
     }()
     
+    private lazy var topTextField: UITextField = {
+        [unowned self] in
+        
+        let textField = UITextField()
+        
+        MemeImageView.prepareTextField(textField)
+        
+        textField.attributedPlaceholder = NSAttributedString(string: "Top", attributes: self.placeholderStyle)
+        
+        return textField
+    }()
+    
+    private lazy var bottomTextField: UITextField = {
+        [unowned self] in
+        
+        let textField = UITextField()
+        
+        MemeImageView.prepareTextField(textField)
+        
+        textField.attributedPlaceholder = NSAttributedString(string: "Bottom", attributes: self.placeholderStyle)
+        
+        return textField
+    }()
+    
     convenience init(){
         self.init(image: nil)
         translatesAutoresizingMaskIntoConstraints = false
         contentMode = .ScaleAspectFit
+        userInteractionEnabled = true
+        hidden = true
+        turnEditingModeOff()
+        
+        let tap = UITapGestureRecognizer(target: self, action: "didTap")
+        tap.numberOfTapsRequired = 1
+        
+        addGestureRecognizer(tap)
+        
+        addSubview(topTextField)
+        addSubview(bottomTextField)
+        
+        topTextField.topAnchor.constraintEqualToAnchor(topAnchor, constant: 20).active = true
+        topTextField.leadingAnchor.constraintEqualToAnchor(leadingAnchor).active = true
+        topTextField.trailingAnchor.constraintEqualToAnchor(trailingAnchor).active = true
+        
+        bottomTextField.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -20).active = true
+        bottomTextField.leadingAnchor.constraintEqualToAnchor(leadingAnchor).active = true
+        bottomTextField.trailingAnchor.constraintEqualToAnchor(trailingAnchor).active = true
     }
     
     override var image: UIImage? {
@@ -53,8 +105,26 @@ class MemeImageView: UIImageView {
                 return
             }
             
+            hidden = false
             refreshBounds()
         }
+    }
+    
+    func didTap(){
+        onTapped?()
+    }
+    
+    private static func prepareTextField(textField: UITextField){
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.borderStyle = .None
+        textField.spellCheckingType = .No
+        textField.autocorrectionType = .No
+        textField.textAlignment = .Center
+        
+        textField.defaultTextAttributes[NSStrokeColorAttributeName] = UIColor.blackColor()
+        textField.defaultTextAttributes[NSStrokeWidthAttributeName] = -2.0
+        textField.defaultTextAttributes[NSForegroundColorAttributeName] = UIColor.whiteColor()
+        textField.defaultTextAttributes[NSFontAttributeName] = UIFont(name: "HelveticaNeue-CondensedBlack", size:  35)
     }
     
     private func adjustToLandscape(){
@@ -88,6 +158,8 @@ class MemeImageView: UIImageView {
     
     override func layoutSublayersOfLayer(layer: CALayer) {
         
+        super.layoutSublayersOfLayer(layer)
+        
         if isLandscape() {
             adjustToLandscape()
         } else {
@@ -97,6 +169,7 @@ class MemeImageView: UIImageView {
         refreshBounds()
     }
     
+  
     private func refreshBounds() {
         
         guard image != nil else {
@@ -117,5 +190,25 @@ class MemeImageView: UIImageView {
         let w = superview!.frame.width
         
         return w > h
+    }
+    
+    func turnEditingModeOn(){
+        topTextField.enabled = true
+        bottomTextField.enabled = true
+        topTextField.hidden = false
+        bottomTextField.hidden = false
+    }
+    
+    func turnEditingModeOff(){
+        topTextField.enabled = false
+        bottomTextField.enabled = false
+        
+        if topTextField.text == "" {
+            topTextField.hidden = true
+        }
+        
+        if bottomTextField.text == "" {
+            bottomTextField.hidden = true
+        }
     }
 }
