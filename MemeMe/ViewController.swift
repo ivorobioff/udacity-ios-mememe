@@ -8,13 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIToolbarDelegate{
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIToolbarDelegate, MemeImageViewDelegate {
 
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var actionBar: UINavigationBar!
     @IBOutlet weak var toolbar: UIToolbar!
     
     private var isFullScreen = false
+    
+    private var bottomTextField: UITextField?
+    private var viewMovedByPoints: CGFloat = 0
+    private var keyboardRect: CGRect?
     
     private let meme = MemeImageView()
     
@@ -24,8 +28,74 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         view.insertSubview(meme, belowSubview: view.subviews.first!)
         
-        meme.onTapped = toggleEditMode
+        meme.delegate = self
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NSNotificationCenter.defaultCenter()
+            .addObserver(self, selector: "keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter()
+            .addObserver(self, selector: "keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool){
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: nil, object: nil)
+    }
+    
+    func keyboardWillAppear(notification: NSNotification){
+        
+        if bottomTextField != nil {
+            
+            resetView()
+            
+            keyboardRect = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+            
+            if keyboardCoversBottomTextField(){
+                
+                let edges = calcEndges()
+                
+                viewMovedByPoints = edges.takenHeight - edges.availableHeight + 10
+                view.frame.origin.y -= viewMovedByPoints
+            }
+            
+        }
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        keyboardRect = nil
+        resetView()
+    }
+    
+    private func calcEndges() -> (availableHeight: CGFloat, takenHeight: CGFloat){
+        let tfRect = view.convertRect(bottomTextField!.bounds, fromView: bottomTextField!)
+        
+        let height = view.frame.size.height - keyboardRect!.size.height
+        
+        let y = tfRect.origin.y + tfRect.size.height
+        
+        return (height, y)
+    }
+    
+    private func keyboardCoversBottomTextField() -> Bool {
+        
+        guard keyboardRect != nil && bottomTextField != nil else {
+            return false
+        }
+        
+        let edges = calcEndges()
+        
+        return edges.takenHeight > edges.availableHeight
+    }
+    
+    private func resetView(){
+        view.frame.origin.y += viewMovedByPoints
+        viewMovedByPoints = 0
+    }
+
     
     private func toggleEditMode(){
         if isFullScreen {
@@ -33,11 +103,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             toolbar.hidden = false
             meme.turnEditingModeOff()
             isFullScreen = false
+            view.backgroundColor = UIColor.groupTableViewBackgroundColor()
         } else {
             actionBar.hidden = true
             toolbar.hidden = true
             meme.turnEditingModeOn()
             isFullScreen = true
+            view.backgroundColor = UIColor.blackColor()
         }
     }
     
@@ -81,6 +153,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLayoutSubviews() {
         actionBar.sizeToFit()
+    }
+    
+    func memeDidTap() {
+        toggleEditMode()
+    }
+    
+    func topLabelDidBeginEditing(textField: UITextField) {
+        //
+    }
+    
+    func topLabelDidEndEditing(textField: UITextField) {
+        //
+    }
+    
+    func bottomLabelDidBeginEditing(textField: UITextField) {
+        bottomTextField = textField
+    }
+    
+    func bottomLabelDidEndEditing(textField: UITextField) {
+        bottomTextField = nil
+        resetView()
     }
 }
 

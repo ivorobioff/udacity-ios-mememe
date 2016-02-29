@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MemeImageView: UIImageView {
+class MemeImageView: UIImageView, UITextFieldDelegate {
     
-    var onTapped: (() -> (Void))?
+    var delegate: MemeImageViewDelegate?
     
     private let placeholderStyle: [String: AnyObject] = [
         NSStrokeColorAttributeName: UIColor.blackColor(),
@@ -90,6 +90,9 @@ class MemeImageView: UIImageView {
         addSubview(topTextField)
         addSubview(bottomTextField)
         
+        topTextField.delegate = self
+        bottomTextField.delegate = self
+        
         topTextField.topAnchor.constraintEqualToAnchor(topAnchor, constant: 20).active = true
         topTextField.leadingAnchor.constraintEqualToAnchor(leadingAnchor).active = true
         topTextField.trailingAnchor.constraintEqualToAnchor(trailingAnchor).active = true
@@ -111,7 +114,7 @@ class MemeImageView: UIImageView {
     }
     
     func didTap(){
-        onTapped?()
+        delegate?.memeDidTap()
     }
     
     private static func prepareTextField(textField: UITextField){
@@ -209,6 +212,26 @@ class MemeImageView: UIImageView {
         
         if bottomTextField.text == "" {
             bottomTextField.hidden = true
+        }
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if textField === topTextField {
+            delegate?.topLabelDidBeginEditing(textField)
+        }
+        
+        if textField === bottomTextField {
+            delegate?.bottomLabelDidBeginEditing(textField)
+        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField === topTextField {
+            delegate?.topLabelDidEndEditing(textField)
+        }
+        
+        if textField === bottomTextField {
+            delegate?.bottomLabelDidEndEditing(textField)
         }
     }
 }
