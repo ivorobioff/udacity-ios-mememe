@@ -17,8 +17,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     private var isFullScreen = false
     
     private var bottomTextField: UITextField?
-    private var viewMovedByPoints: CGFloat = 0
+    private var topTextField: UITextField?
     private var keyboardRect: CGRect?
+    private var keyboardActive = false
     
     private let meme = MemeImageView()
     
@@ -50,7 +51,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         if bottomTextField != nil {
             
-            resetView()
+            view.frame.origin.y = 0
             
             keyboardRect = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
             
@@ -58,16 +59,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
                 let edges = calcEndges()
                 
-                viewMovedByPoints = edges.takenHeight - edges.availableHeight + 10
-                view.frame.origin.y -= viewMovedByPoints
+                let points = edges.takenHeight - edges.availableHeight + 10
+                view.frame.origin.y -= points
             }
             
         }
+        keyboardActive = true
     }
     
     func keyboardWillDisappear(notification: NSNotification){
         keyboardRect = nil
-        resetView()
+        view.frame.origin.y = 0
+        keyboardActive = false
     }
     
     private func calcEndges() -> (availableHeight: CGFloat, takenHeight: CGFloat){
@@ -90,13 +93,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         return edges.takenHeight > edges.availableHeight
     }
-    
-    private func resetView(){
-        view.frame.origin.y += viewMovedByPoints
-        viewMovedByPoints = 0
-    }
 
-    
     private func toggleEditMode(){
         if isFullScreen {
             actionBar.hidden = false
@@ -156,15 +153,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func memeDidTap() {
-        toggleEditMode()
+        if !keyboardActive {
+            toggleEditMode()
+        }
+        
+        if bottomTextField != nil {
+            bottomTextField!.resignFirstResponder()
+        }
+        
+        if topTextField != nil {
+            topTextField!.resignFirstResponder()
+        }
     }
     
     func topLabelDidBeginEditing(textField: UITextField) {
-        //
+        topTextField = textField
     }
     
     func topLabelDidEndEditing(textField: UITextField) {
-        //
+        topTextField = nil
     }
     
     func bottomLabelDidBeginEditing(textField: UITextField) {
@@ -173,7 +180,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func bottomLabelDidEndEditing(textField: UITextField) {
         bottomTextField = nil
-        resetView()
+        view.frame.origin.y = 0
     }
 }
 
