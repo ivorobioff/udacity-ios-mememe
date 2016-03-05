@@ -34,7 +34,6 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         return self.heightAnchor.constraintEqualToConstant(0)
     }()
     
-    
     private lazy var topConstraint: NSLayoutConstraint = {
         [unowned self] in
         return self.topAnchor.constraintEqualToAnchor(self.superview!.topAnchor)
@@ -74,8 +73,8 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         return textField
     }()
     
-    convenience init(){
-        self.init(image: nil)
+    init(){
+        super.init(image: nil)
         translatesAutoresizingMaskIntoConstraints = false
         contentMode = .ScaleAspectFit
         userInteractionEnabled = true
@@ -101,6 +100,10 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         bottomTextField.leadingAnchor.constraintEqualToAnchor(leadingAnchor).active = true
         bottomTextField.trailingAnchor.constraintEqualToAnchor(trailingAnchor).active = true
     }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override var image: UIImage? {
         didSet {
@@ -110,6 +113,7 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
             
             hidden = false
             refreshBounds()
+            delegate?.memeDidChange()
         }
     }
     
@@ -215,6 +219,30 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         }
     }
     
+    func refreshWithModel(model: MemeModel){
+        image = model.image
+        topTextField.text = model.top
+        bottomTextField.text = model.bottom
+        
+        if topTextField.text == "" || topTextField.text == nil {
+            topTextField.hidden = true
+        } else {
+            topTextField.hidden = false
+        }
+        
+        if bottomTextField.text == "" || bottomTextField.text == nil {
+            bottomTextField.hidden = true
+        } else {
+            bottomTextField.hidden = false
+        }
+    }
+    
+    func dumpToModel(model: MemeModel){
+        model.bottom = bottomTextField.text
+        model.top = topTextField.text
+        model.image = image
+    }
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField === topTextField {
             delegate?.topLabelDidBeginEditing(textField)
@@ -233,5 +261,7 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         if textField === bottomTextField {
             delegate?.bottomLabelDidEndEditing(textField)
         }
+        
+        delegate?.memeDidChange()
     }
 }

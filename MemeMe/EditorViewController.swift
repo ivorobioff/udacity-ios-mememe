@@ -8,11 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIToolbarDelegate, MemeImageViewDelegate {
+class EditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIToolbarDelegate, MemeImageViewDelegate {
 
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var actionBar: UINavigationBar!
     @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var saveMemeButton: UIBarButtonItem!
+    @IBOutlet weak var shareMemeButton: UIBarButtonItem!
     
     private var isFullScreen = false
     
@@ -21,17 +23,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     private var keyboardRect: CGRect?
     private var keyboardActive = false
     
-    private let meme = MemeImageView()
+    private let memeView = MemeImageView()
+    
+    var memeModel: MemeModel!
+    
+    var resultDelegate: EditorResultDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
         
-        view.insertSubview(meme, belowSubview: view.subviews.first!)
+        view.insertSubview(memeView, belowSubview: view.subviews.first!)
+        memeView.delegate = self
+        memeView.refreshWithModel(memeModel)
+        saveMemeButton.enabled = false
+        shareMemeButton.enabled = false
         
-        meme.delegate = self
+        if navigationController != nil {
+            actionBar.hidden = true
+        }
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -53,7 +65,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             view.frame.origin.y = 0
             
-            keyboardRect = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+            keyboardRect = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
             
             if keyboardCoversBottomTextField(){
                 
@@ -98,13 +110,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if isFullScreen {
             actionBar.hidden = false
             toolbar.hidden = false
-            meme.turnEditingModeOff()
+            memeView.turnEditingModeOff()
             isFullScreen = false
             view.backgroundColor = UIColor.groupTableViewBackgroundColor()
         } else {
             actionBar.hidden = true
             toolbar.hidden = true
-            meme.turnEditingModeOn()
+            memeView.turnEditingModeOn()
             isFullScreen = true
             view.backgroundColor = UIColor.blackColor()
         }
@@ -116,7 +128,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
         } else {
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                meme.image = image
+                memeView.image = image
             }
         }
         
@@ -166,6 +178,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    @IBAction func saveMeme(sender: UIBarButtonItem) {
+        memeView.dumpToModel(memeModel!)
+        resultDelegate?.editorDidSave(self)
+    }
+    
+    @IBAction func cancelMeme(sender: UIBarButtonItem) {
+        resultDelegate?.editorDidCancel(self)
+    }
+    
     func topLabelDidBeginEditing(textField: UITextField) {
         topTextField = textField
     }
@@ -181,6 +202,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func bottomLabelDidEndEditing(textField: UITextField) {
         bottomTextField = nil
         view.frame.origin.y = 0
+    }
+    
+    func memeDidChange(){
+        saveMemeButton.enabled = true
+        shareMemeButton.enabled = true
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 
 protocol MemeImageViewDelegate {
     func memeDidTap()
+    func memeDidChange()
     func topLabelDidBeginEditing(textField: UITextField)
     func topLabelDidEndEditing(textField: UITextField)
     func bottomLabelDidBeginEditing(textField: UITextField)
