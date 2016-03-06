@@ -37,10 +37,17 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
         memeView.delegate = self
         memeView.refreshWithModel(memeModel)
         saveMemeButton.enabled = false
-        shareMemeButton.enabled = false
+        
+        if memeModel.isEmpty() {
+           shareMemeButton.enabled = false 
+        }
         
         if navigationController != nil {
             actionBar.hidden = true
+            let item = actionBar.items!.first!
+            navigationItem.title = item.title
+            navigationItem.rightBarButtonItems = item.rightBarButtonItems
+            item.rightBarButtonItems = nil
         }
     }
 
@@ -105,20 +112,28 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         return edges.takenHeight > edges.availableHeight
     }
-
+    
     private func toggleEditMode(){
         if isFullScreen {
-            actionBar.hidden = false
+            hideActionBar(false)
             toolbar.hidden = false
             memeView.turnEditingModeOff()
             isFullScreen = false
             view.backgroundColor = UIColor.groupTableViewBackgroundColor()
         } else {
-            actionBar.hidden = true
+            hideActionBar(true)
             toolbar.hidden = true
             memeView.turnEditingModeOn()
             isFullScreen = true
             view.backgroundColor = UIColor.blackColor()
+        }
+    }
+    
+    private func hideActionBar(flag: Bool){
+        if navigationController != nil {
+            navigationController!.navigationBarHidden = flag
+        } else {
+            actionBar.hidden = flag
         }
     }
     
@@ -161,6 +176,7 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         actionBar.sizeToFit()
     }
     
@@ -181,6 +197,7 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBAction func saveMeme(sender: UIBarButtonItem) {
         memeView.dumpToModel(memeModel!)
         resultDelegate?.editorDidSave(self)
+        saveMemeButton.enabled = false
     }
     
     @IBAction func cancelMeme(sender: UIBarButtonItem) {

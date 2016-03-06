@@ -12,6 +12,8 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var memeListView: UITableView!
     
+    private var isEditing = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -45,15 +47,21 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if segue.identifier == "toAddMeme" {
             editor.memeModel = MemeModel()
+            isEditing = false
         } else {
             editor.memeModel = sender as? MemeModel
+            isEditing = true
         }
     
     }
     
     func editorDidSave(editor: EditorViewController) {
-        MemeStorage.models.append(editor.memeModel!)
-        dismissViewControllerAnimated(true, completion: nil)
+        
+        if !isEditing {
+            MemeStorage.models.append(editor.memeModel!)
+            dismissViewControllerAnimated(true, completion: nil)
+        }
+        
         memeListView.reloadData()
     }
     
