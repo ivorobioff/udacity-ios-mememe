@@ -8,15 +8,22 @@
 
 import UIKit
 
-class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditorResultDelegate {
+class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditorResultDelegate, UITabBarDelegate {
     
     @IBOutlet weak var memeListView: UITableView!
+    @IBOutlet weak var memeGridView: UICollectionView!
+    
+    
+    @IBOutlet weak var viewSwitcher: UITabBar!
     
     private var isEditing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewSwitcher.delegate = self
+        viewSwitcher.selectedItem = viewSwitcher.items!.first
     }
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return MemeStorage.models.count
@@ -33,6 +40,10 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.bottomText.text = model.bottom
             
         return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 100
     }
     
     @IBAction func addMeme(sender: UIBarButtonItem) {
@@ -53,6 +64,19 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
             isEditing = true
         }
     
+    }
+    
+    func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {
+        
+        if item.tag == 1 {
+            memeListView.hidden = false
+            memeGridView.hidden = true
+        }
+        
+        if item.tag == 2 {
+            memeListView.hidden = true
+            memeGridView.hidden = false
+        }
     }
     
     func editorDidSave(editor: EditorViewController) {
