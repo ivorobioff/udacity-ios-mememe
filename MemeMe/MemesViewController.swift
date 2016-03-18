@@ -24,14 +24,14 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("memeCell")!
+        let cell = tableView.dequeueReusableCellWithIdentifier("memeCell") as! MemeTableViewCell
         
         let model = MemeStorage.models[indexPath.row]
         
-        cell.textLabel!.text = model.top
-        cell.imageView!.image = model.image
-        cell.detailTextLabel!.text = model.bottom
-        
+        cell.thumb.image = model.image
+        cell.topText.text = model.top
+        cell.bottomText.text = model.bottom
+            
         return cell
     }
     
