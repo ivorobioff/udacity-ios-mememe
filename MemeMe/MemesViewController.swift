@@ -8,7 +8,8 @@
 
 import UIKit
 
-class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditorResultDelegate, UITabBarDelegate {
+class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,
+    EditorResultDelegate, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var memeListView: UITableView!
     @IBOutlet weak var memeGridView: UICollectionView!
@@ -24,8 +25,11 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         viewSwitcher.selectedItem = viewSwitcher.items!.first
     }
     
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return MemeStorage.models.count
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return MemeStorage.models.count
     }
     
@@ -38,7 +42,22 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.thumb.image = model.image
         cell.topText.text = model.top
         cell.bottomText.text = model.bottom
+        
             
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath)
+        
+        let model = MemeStorage.models[indexPath.row]
+        
+        let image = UIImageView(frame: CGRectMake(0, 0, 80, 80))
+        image.image = model.image
+        image.contentMode = .ScaleAspectFill
+        
+        cell.contentView.addSubview(image)
+        
         return cell
     }
     
@@ -87,6 +106,7 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         memeListView.reloadData()
+        memeGridView.reloadData()
     }
     
     func editorDidCancel(editor: EditorViewController) {
