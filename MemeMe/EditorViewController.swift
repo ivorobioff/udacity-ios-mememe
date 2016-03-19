@@ -59,11 +59,14 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         NSNotificationCenter.defaultCenter()
             .addObserver(self, selector: "keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        
+        tabBarController?.tabBar.hidden = true
     }
     
     override func viewWillDisappear(animated: Bool){
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: nil, object: nil)
+        tabBarController?.tabBar.hidden = false
     }
     
     func keyboardWillAppear(notification: NSNotification){

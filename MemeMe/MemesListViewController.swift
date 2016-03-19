@@ -8,7 +8,8 @@
 
 import UIKit
 
-class MemesListViewController: MemesViewController,  UITableViewDelegate, UITableViewDataSource {
+class MemesListViewController: MemesViewController,  UITableViewDelegate, UITableViewDataSource, DataChangeDelegate {
+   
     @IBOutlet weak var memeListView: UITableView!
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -31,6 +32,7 @@ class MemesListViewController: MemesViewController,  UITableViewDelegate, UITabl
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
+        currentIndexPath = indexPath
     }
 
     
@@ -40,14 +42,36 @@ class MemesListViewController: MemesViewController,  UITableViewDelegate, UITabl
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            let indexPaths = [indexPath]
             MemeStorage.models.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            dataDidDelete(indexPaths)
+            getGridController()?.dataDidDelete(indexPaths)
         }
     }
     
     override func editorDidSave(editor: EditorViewController) {
         super.editorDidSave(editor)
         
-        memeListView.insertRowsAtIndexPaths([NSIndexPath(forRow: MemeStorage.models.count - 1, inSection: 0)], withRowAnimation: .Automatic)
+        if !isEditingMode {
+            let indexPaths = [NSIndexPath(forRow: MemeStorage.models.count - 1, inSection: 0)];
+            dataDidInsert(indexPaths)
+            getGridController()?.dataDidInsert(indexPaths)
+        } else {
+            let indexPaths = [currentIndexPath!]
+            dataDidUpdate(indexPaths)
+            getGridController()?.dataDidUpdate(indexPaths)
+        }
+    }
+    
+    func dataDidInsert(indexPaths: [NSIndexPath]){
+        memeListView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+    }
+    
+    func dataDidUpdate(indexPaths: [NSIndexPath]){
+        memeListView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+    }
+    
+    func dataDidDelete(indexPaths: [NSIndexPath]){
+        memeListView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
     }
 }

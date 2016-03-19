@@ -112,10 +112,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VpI-LJ-tYo" userLabel="Meme Grid View">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VpI-LJ-tYo" userLabel="Meme Grid View">
+                                <rect key="frame" x="20" y="0.0" width="560" height="551"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="20" id="fen-PV-RkO">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="10" id="fen-PV-RkO">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="50" height="20"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -133,7 +133,7 @@
                                     </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="spaceHeader" id="qcN-Sg-cto">
-                                    <rect key="frame" x="0.0" y="64" width="600" height="20"/>
+                                    <rect key="frame" x="0.0" y="64" width="560" height="20"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                                 <connections>
@@ -144,8 +144,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="VpI-LJ-tYo" firstAttribute="leading" secondItem="Sfl-bq-X5U" secondAttribute="leading" id="Juk-Vg-DVA"/>
-                            <constraint firstAttribute="trailing" secondItem="VpI-LJ-tYo" secondAttribute="trailing" id="OMs-Zh-tUA"/>
+                            <constraint firstItem="VpI-LJ-tYo" firstAttribute="leading" secondItem="Sfl-bq-X5U" secondAttribute="leading" constant="20" id="Juk-Vg-DVA"/>
+                            <constraint firstAttribute="trailing" secondItem="VpI-LJ-tYo" secondAttribute="trailing" constant="20" id="OMs-Zh-tUA"/>
                             <constraint firstItem="iws-C0-k1v" firstAttribute="top" secondItem="VpI-LJ-tYo" secondAttribute="bottom" id="Q2F-0q-evg"/>
                             <constraint firstItem="VpI-LJ-tYo" firstAttribute="top" secondItem="Sfl-bq-X5U" secondAttribute="top" id="Rv6-SE-WNg"/>
                         </constraints>

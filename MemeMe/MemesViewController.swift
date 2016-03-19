@@ -8,9 +8,11 @@
 
 import UIKit
 
-class MemesViewController: UIViewController, EditorResultDelegate, UITabBarDelegate {
+class MemesViewController: UIViewController, EditorResultDelegate {
     
-    private var isEditing = false
+    var isEditingMode = false
+    
+    var currentIndexPath: NSIndexPath?
     
     @IBAction func addMeme(sender: UIBarButtonItem) {
         performSegueWithIdentifier("toAddMeme", sender: nil)
@@ -24,16 +26,25 @@ class MemesViewController: UIViewController, EditorResultDelegate, UITabBarDeleg
         
         if segue.identifier == "toAddMeme" {
             editor.memeModel = MemeModel()
-            isEditing = false
+            isEditingMode = false
         } else {
             editor.memeModel = sender as? MemeModel
-            isEditing = true
+            isEditingMode = true
         }
-    
     }
-     func editorDidSave(editor: EditorViewController) {
-        
-        if !isEditing {
+    
+    func getListController() -> MemesListViewController {
+        let navController = self.tabBarController!.viewControllers!.first as! UINavigationController
+        return navController.viewControllers.first as! MemesListViewController
+    }
+    
+    func getGridController() -> MemesGridViewController? {
+        let navController = self.tabBarController!.viewControllers!.last as? UINavigationController
+        return navController?.viewControllers.first as? MemesGridViewController
+    }
+    
+    func editorDidSave(editor: EditorViewController) {
+        if !isEditingMode {
             MemeStorage.models.append(editor.memeModel!)
             dismissViewControllerAnimated(true, completion: nil)
         }
