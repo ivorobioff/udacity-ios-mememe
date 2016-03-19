@@ -8,67 +8,9 @@
 
 import UIKit
 
-class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,
-    EditorResultDelegate, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    @IBOutlet weak var memeListView: UITableView!
-    @IBOutlet weak var memeGridView: UICollectionView!
-    
-    
-    @IBOutlet weak var viewSwitcher: UITabBar!
+class MemesViewController: UIViewController, EditorResultDelegate, UITabBarDelegate {
     
     private var isEditing = false
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        viewSwitcher.delegate = self
-        viewSwitcher.selectedItem = viewSwitcher.items!.first
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MemeStorage.models.count
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return MemeStorage.models.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("memeCell") as! MemeTableViewCell
-        
-        let model = MemeStorage.models[indexPath.row]
-        
-        cell.thumb.image = model.image
-        cell.topText.text = model.top
-        cell.bottomText.text = model.bottom
-        
-            
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath)
-        
-        let model = MemeStorage.models[indexPath.row]
-        let thumb = ThumbImageView(model: model)
-        cell.contentView.addSubview(thumb)
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 100
-    }
-    
     
     @IBAction func addMeme(sender: UIBarButtonItem) {
         performSegueWithIdentifier("toAddMeme", sender: nil)
@@ -89,29 +31,12 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     
     }
-    
-    func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {
-        
-        if item.tag == 1 {
-            memeListView.hidden = false
-            memeGridView.hidden = true
-        }
-        
-        if item.tag == 2 {
-            memeListView.hidden = true
-            memeGridView.hidden = false
-        }
-    }
-    
-    func editorDidSave(editor: EditorViewController) {
+     func editorDidSave(editor: EditorViewController) {
         
         if !isEditing {
             MemeStorage.models.append(editor.memeModel!)
             dismissViewControllerAnimated(true, completion: nil)
         }
-        
-        memeListView.reloadData()
-        memeGridView.reloadData()
     }
     
     func editorDidCancel(editor: EditorViewController) {
