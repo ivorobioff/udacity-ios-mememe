@@ -19,35 +19,7 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size:  35)!
     ]
     
-    private lazy var leadingConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.leadingAnchor.constraintEqualToAnchor(self.superview!.leadingAnchor)
-    }()
-    
-    private lazy var trailingConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.trailingAnchor.constraintEqualToAnchor(self.superview!.trailingAnchor)
-    }()
-    
-    private lazy var heightConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.heightAnchor.constraintEqualToConstant(0)
-    }()
-    
-    private lazy var topConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.topAnchor.constraintEqualToAnchor(self.superview!.topAnchor)
-    }()
-    
-    private lazy var bottomConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.bottomAnchor.constraintEqualToAnchor(self.superview!.bottomAnchor)
-    }()
-    
-    private lazy var widthConstraint: NSLayoutConstraint = {
-        [unowned self] in
-        return self.widthAnchor.constraintEqualToConstant(0)
-    }()
+    private let constraintManager = ConstraintManager()
     
     private lazy var topTextField: UITextField = {
         [unowned self] in
@@ -75,6 +47,9 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
     
     init(){
         super.init(image: nil)
+        
+        constraintManager.view = self
+        
         translatesAutoresizingMaskIntoConstraints = false
         contentMode = .ScaleAspectFit
         userInteractionEnabled = true
@@ -145,15 +120,15 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
     }
     
     private func enablePortraitConstraits(flag: Bool = true){
-        leadingConstraint.active = flag
-        trailingConstraint.active = flag
-        heightConstraint.active = flag
+        constraintManager.leading.active = flag
+        constraintManager.trailing.active = flag
+        constraintManager.height.active = flag
     }
     
     private func enableLandscapeConstraints(flag: Bool = true){
-        topConstraint.active = flag
-        bottomConstraint.active = flag
-        widthConstraint.active = flag
+        constraintManager.top.active = flag
+        constraintManager.bottom.active = flag
+        constraintManager.width.active = flag
     }
     
     override func didMoveToSuperview() {
@@ -185,10 +160,10 @@ class MemeImageView: UIImageView, UITextFieldDelegate {
         
         if isLandscape() {
             let r = image!.size.height / frame.height
-            widthConstraint.constant = image!.size.width / r
+            constraintManager.width.constant = image!.size.width / r
         } else {
             let r = image!.size.width / frame.width
-            heightConstraint.constant = image!.size.height / r
+            constraintManager.height.constant = image!.size.height / r
         }
     }
     

@@ -51,19 +51,24 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath)
         
         let model = MemeStorage.models[indexPath.row]
-        
-        let image = UIImageView(frame: CGRectMake(0, 0, 80, 80))
-        image.image = model.image
-        image.contentMode = .ScaleAspectFill
-        
-        cell.contentView.addSubview(image)
+        let thumb = ThumbImageView(model: model)
+        cell.contentView.addSubview(thumb)
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 100
     }
+    
     
     @IBAction func addMeme(sender: UIBarButtonItem) {
         performSegueWithIdentifier("toAddMeme", sender: nil)
@@ -111,9 +116,5 @@ class MemesViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func editorDidCancel(editor: EditorViewController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
     }
 }
