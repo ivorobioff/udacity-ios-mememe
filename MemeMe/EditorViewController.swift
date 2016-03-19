@@ -139,12 +139,8 @@ class EditorViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
-        if picker.sourceType == .Camera {
-            
-        } else {
-            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                memeView.image = image
-            }
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            memeView.image = image
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
