@@ -8,19 +8,32 @@
 
 import UIKit
 
-class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate {
+class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate, ModeSwitcherDelegate {
     @IBOutlet weak var memeGridView: UICollectionView!
+    
+    private var isSelectMode = false
     
     private lazy var modeSwitcher: ModeSwitcher = {
         [unowned self] in
         return ModeSwitcher(controller: self)
     }()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        modeSwitcher.delegate = self
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         modeSwitcher.turnOff()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        hidesBottomBarWhenPushed = true
+    }
+
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return MemeStorage.models.count
     }
@@ -68,5 +81,21 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     
     func dataDidDelete(indexPaths: [NSIndexPath]){
         memeGridView?.deleteItemsAtIndexPaths(indexPaths)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isSelectMode == false {
+            tabBarController!.tabBar.hidden = false
+        }
+    }
+    
+    func modeWillCancel() {
+        isSelectMode = false
+    }
+    
+    func modeWillActivate() {
+        isSelectMode = true
     }
 }

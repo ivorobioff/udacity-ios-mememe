@@ -8,13 +8,15 @@
 
 import UIKit
 
-class ModeSwitcher : NSObject {
+class ModeSwitcher : NSObject, UIToolbarDelegate {
     private var controller: UIViewController
     
     private var leftButtons: [UIBarButtonItem]?
     private var rightButtons: [UIBarButtonItem]?
     private var toolBarItems: [UIBarButtonItem]?
     private var title: String?
+    
+    var delegate: ModeSwitcherDelegate?
     
     private lazy var cancelButton: UIBarButtonItem = {
         [unowned self] in
@@ -31,6 +33,7 @@ class ModeSwitcher : NSObject {
         return UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "removeAll")
     }()
     
+    
     init(controller: UIViewController){
         self.controller = controller
         
@@ -38,23 +41,30 @@ class ModeSwitcher : NSObject {
         rightButtons = controller.navigationItem.rightBarButtonItems
         title = controller.navigationItem.title
         toolBarItems = controller.toolbarItems
+        
+        controller
     }
     
     func turnOn(){
+        delegate?.modeWillActivate()
         controller.navigationItem.title = "Select Items"
         controller.navigationItem.leftBarButtonItems = [cancelButton]
         controller.navigationItem.rightBarButtonItems = [selectAllButton]
-        controller.toolbarItems = [trashButton]
+        
+        let space = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        
+        controller.toolbarItems = [space, trashButton]
         controller.tabBarController!.tabBar.hidden = true
         controller.navigationController!.toolbarHidden = false
     }
     
     func turnOff(){
+        delegate?.modeWillCancel()
         controller.navigationItem.title = title
         controller.navigationItem.leftBarButtonItems = leftButtons
         controller.navigationItem.rightBarButtonItems = rightButtons
-        controller.navigationController!.toolbarHidden = true
         controller.toolbarItems = toolBarItems
+        controller.navigationController!.toolbarHidden = true
         controller.tabBarController!.tabBar.hidden = false
     }
     
