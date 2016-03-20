@@ -59,10 +59,8 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        if modeSwitcher.isOn == false {
-            performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
-        }
-        
+        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
+
         currentIndexPath = indexPath
         
         collectionView.deselectItemAtIndexPath(indexPath, animated: false)
