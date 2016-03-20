@@ -16,7 +16,7 @@ class ModeSwitcher : NSObject, UIToolbarDelegate {
     private var toolBarItems: [UIBarButtonItem]?
     private var title: String?
     
-    var delegate: ModeSwitcherDelegate?
+    var isOn = false
     
     private lazy var cancelButton: UIBarButtonItem = {
         [unowned self] in
@@ -46,7 +46,7 @@ class ModeSwitcher : NSObject, UIToolbarDelegate {
     }
     
     func turnOn(){
-        delegate?.modeWillActivate()
+        isOn = true
         controller.navigationItem.title = "Select Items"
         controller.navigationItem.leftBarButtonItems = [cancelButton]
         controller.navigationItem.rightBarButtonItems = [selectAllButton]
@@ -59,7 +59,7 @@ class ModeSwitcher : NSObject, UIToolbarDelegate {
     }
     
     func turnOff(){
-        delegate?.modeWillCancel()
+        isOn = false
         controller.navigationItem.title = title
         controller.navigationItem.leftBarButtonItems = leftButtons
         controller.navigationItem.rightBarButtonItems = rightButtons

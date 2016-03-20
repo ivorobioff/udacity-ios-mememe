@@ -8,19 +8,24 @@
 
 import UIKit
 
-class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate, ModeSwitcherDelegate {
+class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate {
     @IBOutlet weak var memeGridView: UICollectionView!
-    
-    private var isSelectMode = false
     
     private lazy var modeSwitcher: ModeSwitcher = {
         [unowned self] in
         return ModeSwitcher(controller: self)
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        modeSwitcher.delegate = self
+    private var isAppearing = false
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        isAppearing = true
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        isAppearing = false
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -53,7 +58,11 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
+        
+        if modeSwitcher.isOn == false {
+            performSegueWithIdentifier("toEditMeme", sender: MemeStorage.models[indexPath.row])
+        }
+        
         currentIndexPath = indexPath
     }
     
@@ -86,16 +95,8 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if isSelectMode == false {
+        if isAppearing == true {
             tabBarController!.tabBar.hidden = false
         }
-    }
-    
-    func modeWillCancel() {
-        isSelectMode = false
-    }
-    
-    func modeWillActivate() {
-        isSelectMode = true
     }
 }
