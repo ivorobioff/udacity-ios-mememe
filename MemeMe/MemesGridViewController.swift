@@ -13,7 +13,7 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     
     private lazy var modeSwitcher: ModeSwitcher = {
         [unowned self] in
-        return ModeSwitcher(controller: self)
+        return ModeSwitcher(controller: self, collection: self.memeGridView)
     }()
     
     private var isAppearing = false
@@ -64,7 +64,10 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
         }
         
         currentIndexPath = indexPath
+        
+        collectionView.deselectItemAtIndexPath(indexPath, animated: false)
     }
+  
     
     override func editorDidSave(editor: EditorViewController) {
         super.editorDidSave(editor)
