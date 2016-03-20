@@ -113,7 +113,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VpI-LJ-tYo" userLabel="Meme Grid View">
-                                <rect key="frame" x="20" y="0.0" width="560" height="551"/>
+                                <rect key="frame" x="20" y="0.0" width="560" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="10" id="fen-PV-RkO">
                                     <size key="itemSize" width="100" height="100"/>
@@ -142,16 +142,21 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="VpI-LJ-tYo" firstAttribute="leading" secondItem="Sfl-bq-X5U" secondAttribute="leading" constant="20" id="Juk-Vg-DVA"/>
                             <constraint firstAttribute="trailing" secondItem="VpI-LJ-tYo" secondAttribute="trailing" constant="20" id="OMs-Zh-tUA"/>
-                            <constraint firstItem="iws-C0-k1v" firstAttribute="top" secondItem="VpI-LJ-tYo" secondAttribute="bottom" id="Q2F-0q-evg"/>
-                            <constraint firstItem="VpI-LJ-tYo" firstAttribute="top" secondItem="Sfl-bq-X5U" secondAttribute="top" id="Rv6-SE-WNg"/>
+                            <constraint firstAttribute="bottom" secondItem="VpI-LJ-tYo" secondAttribute="bottom" id="WAi-k8-52B"/>
+                            <constraint firstItem="VpI-LJ-tYo" firstAttribute="top" secondItem="Sfl-bq-X5U" secondAttribute="top" id="XTu-4Q-xru"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Grid" id="gUD-uu-vlN"/>
                     <navigationItem key="navigationItem" id="Qt7-fC-vgg">
+                        <barButtonItem key="leftBarButtonItem" title="Select" id="pcE-yX-vYB">
+                            <connections>
+                                <action selector="turnSelectModeOn:" destination="1PX-sD-kms" id="7rQ-b4-oDq"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="x7v-W6-FDI">
                             <connections>
                                 <action selector="addMeme:" destination="1PX-sD-kms" id="ooE-4m-xeK"/>
@@ -181,7 +186,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="73" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OgK-Bf-uIp">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="memeCell" rowHeight="100" id="FNf-8J-JL8" customClass="MemeTableViewCell" customModule="MemeMe" customModuleProvider="target">
@@ -251,8 +256,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="XNf-aa-mHV" firstAttribute="top" secondItem="OgK-Bf-uIp" secondAttribute="bottom" id="0A2-bE-ZCC"/>
                             <constraint firstItem="OgK-Bf-uIp" firstAttribute="top" secondItem="3w7-VD-Cd7" secondAttribute="top" id="56o-1P-R03"/>
+                            <constraint firstAttribute="bottom" secondItem="OgK-Bf-uIp" secondAttribute="bottom" id="l4I-RI-jaG"/>
                             <constraint firstAttribute="trailing" secondItem="OgK-Bf-uIp" secondAttribute="trailing" id="p6Q-4P-xaL"/>
                             <constraint firstItem="OgK-Bf-uIp" firstAttribute="leading" secondItem="3w7-VD-Cd7" secondAttribute="leading" id="xZt-XJ-ElI"/>
                         </constraints>
@@ -302,6 +307,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="lZi-z5-huk">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="1PX-sD-kms" kind="relationship" relationship="rootViewController" id="Bz6-MK-VNk"/>
                     </connections>

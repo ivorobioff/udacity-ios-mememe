@@ -10,15 +10,25 @@ import UIKit
 
 class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate {
     @IBOutlet weak var memeGridView: UICollectionView!
-        
+    
+    private lazy var modeSwitcher: ModeSwitcher = {
+        [unowned self] in
+        return ModeSwitcher(controller: self)
+    }()
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        modeSwitcher.turnOff()
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return MemeStorage.models.count
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+   
+    @IBAction func turnSelectModeOn(sender: UIBarButtonItem) {
+        modeSwitcher.turnOn()
     }
-    
+  
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath)
         

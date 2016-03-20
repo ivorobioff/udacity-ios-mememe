@@ -21,15 +21,16 @@ class MemesViewController: UIViewController, EditorResultDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         super.prepareForSegue(segue, sender: sender)
         
-        let editor = segue.destinationViewController as! EditorViewController
-        editor.resultDelegate = self
-        
-        if segue.identifier == "toAddMeme" {
-            editor.memeModel = MemeModel()
-            isEditingMode = false
-        } else {
-            editor.memeModel = sender as? MemeModel
-            isEditingMode = true
+        if let editor = segue.destinationViewController as? EditorViewController {
+            editor.resultDelegate = self
+            
+            if segue.identifier == "toAddMeme" {
+                editor.memeModel = MemeModel()
+                isEditingMode = false
+            } else if segue.identifier == "toEditMeme" {
+                editor.memeModel = sender as? MemeModel
+                isEditingMode = true
+            }
         }
     }
     
