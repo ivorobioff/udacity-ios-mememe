@@ -12,14 +12,26 @@ class ThumbImageView: UIImageView {
     
     private let constraintManager = ConstraintManager()
     
-    init(model: MemeModel) {
-        super.init(image: model.image)
+    private var topLabel: UILabel!
+    private var bottomLabel: UILabel!
+    
+    var model: MemeModel! {
+        didSet {
+            topLabel.text = model?.top
+            bottomLabel.text = model?.bottom
+            image = model?.image
+        }
+    }
+    
+    init() {
+        super.init(image: nil)
+        
+        topLabel = createLabel()
+        bottomLabel = createLabel()
+        
         translatesAutoresizingMaskIntoConstraints = false
         constraintManager.view = self
         contentMode = .ScaleAspectFill
-        
-        let topLabel = createLabel(model.top)
-        let bottomLabel = createLabel(model.bottom)
         
         addSubview(topLabel)
         addSubview(bottomLabel)
@@ -45,11 +57,10 @@ class ThumbImageView: UIImageView {
     }
     
     
-    private func createLabel(text: String?) -> UILabel{
+    private func createLabel() -> UILabel{
         let label = UILabel()
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = text
         label.textColor = UIColor.whiteColor()
         label.font = UIFont.boldSystemFontOfSize(12)
         label.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)

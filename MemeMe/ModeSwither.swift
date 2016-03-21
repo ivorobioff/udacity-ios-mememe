@@ -21,7 +21,9 @@ class ModeSwitcher : NSObject, UIToolbarDelegate, UICollectionViewDelegate {
     
     var isOn = false
     
-    let defaultTitle = "Select Memes"
+    private var allCellsSelected = false
+    
+    let defaultTitle = "Slselect Memes"
     
     private lazy var cancelButton: UIBarButtonItem = {
         [unowned self] in
@@ -119,7 +121,10 @@ class ModeSwitcher : NSObject, UIToolbarDelegate, UICollectionViewDelegate {
     func deselectAllSelected() {
         for indexPath in collection.indexPathsForSelectedItems() ?? [] {
             collection.deselectItemAtIndexPath(indexPath, animated: true)
-            deselectCell(collection.cellForItemAtIndexPath(indexPath)!)
+            
+            if let cell = collection.cellForItemAtIndexPath(indexPath) {
+                deselectCell(cell)
+            }
         }
     }
     
@@ -129,7 +134,7 @@ class ModeSwitcher : NSObject, UIToolbarDelegate, UICollectionViewDelegate {
     
     func selectAll()
     {
-        
+        allCellsSelected = true
     }
     
     func removeAll()

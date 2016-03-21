@@ -9,6 +9,7 @@
 import UIKit
 
 class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataChangeDelegate {
+    
     @IBOutlet weak var memeGridView: UICollectionView!
     
     private lazy var modeSwitcher: ModeSwitcher = {
@@ -48,14 +49,13 @@ class MemesGridViewController: MemesViewController, UICollectionViewDelegate, UI
     }
   
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("memeCell", forIndexPath: indexPath) as! MemeGridViewCell
         
-        let model = MemeStorage.models[indexPath.row]
-        let thumb = ThumbImageView(model: model)
-        cell.contentView.addSubview(thumb)
-
+        cell.thumb.model = MemeStorage.models[indexPath.row]
+        
         return cell
     }
+    
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         

@@ -25,6 +25,7 @@
 		2FDBAA591C7B40B60046D1BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FDBAA571C7B40B60046D1BA /* Main.storyboard */; };
 		2FDBAA5B1C7B40B60046D1BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FDBAA5A1C7B40B60046D1BA /* Assets.xcassets */; };
 		2FDBAA5E1C7B40B60046D1BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FDBAA5C1C7B40B60046D1BA /* LaunchScreen.storyboard */; };
+		2FFF73381CA03F9C0096DD8E /* MemeGridViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF73371CA03F9C0096DD8E /* MemeGridViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		2FDBAA5A1C7B40B60046D1BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FDBAA5D1C7B40B60046D1BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FDBAA5F1C7B40B60046D1BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2FFF73371CA03F9C0096DD8E /* MemeGridViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemeGridViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				2F9A6A381C9DAF4F00F03A9D /* MemesGridViewController.swift */,
 				2F9A6A3A1C9DD6E800F03A9D /* DataChangeDelegate.swift */,
 				2FAB3C8A1C9EB65B00DE96D3 /* ModeSwither.swift */,
+				2FFF73371CA03F9C0096DD8E /* MemeGridViewCell.swift */,
 			);
 			path = MemeMe;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 				2FC996B71C8B1B5D005DED05 /* MemeStorage.swift in Sources */,
 				2F9A6A371C9DAEE600F03A9D /* MemesListViewController.swift in Sources */,
 				2FC996BB1C8B3273005DED05 /* MemesViewController.swift in Sources */,
+				2FFF73381CA03F9C0096DD8E /* MemeGridViewCell.swift in Sources */,
 				2FD297A01C7DFBE6005D3349 /* MemeImageView.swift in Sources */,
 				2F0000251C9C80620012946C /* MemeTableViewCell.swift in Sources */,
 				2F9A6A391C9DAF4F00F03A9D /* MemesGridViewController.swift in Sources */,
